@@ -1,2 +1,2 @@
 # RectSky
-Library Help you to create Number,String Matrices.
+A library that Help you to create Number,String Matrices.
