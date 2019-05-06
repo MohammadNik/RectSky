@@ -7,16 +7,6 @@ public class NumberMatrix extends AbstractMatrix<Number> {
     }
 
     @Override
-    public NumberMatrix add(Number value) {
-        return this;
-    }
-
-    @Override
-    public NumberMatrix add(Number number, int row, int column) {
-        return this;
-    }
-
-    @Override
     public void print() {
 
     }
