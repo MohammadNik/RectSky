@@ -1,10 +1,14 @@
 package org.RectSky;
 
+import org.RectSky.Exceptions.MatrixFullException;
 import org.RectSky.Exceptions.MatrixNotSquareException;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public abstract class AbstractMatrix<T> {
     private int rowSize;
@@ -17,7 +21,22 @@ public abstract class AbstractMatrix<T> {
         matrix = new Float[rowSize][columnSize];
     }
 
-    public abstract AbstractMatrix<T> add(T value);
+    public AbstractMatrix<T> add(T value){
+        if (value == null)
+            throw new NullPointerException("Value is Null!");
+
+        if (isMatrixFull())
+            throw new MatrixFullException();
+
+        for (int row = 0; row < getRowSize(); row++)
+            for (int column = 0; column < getColumnSize(); column++)
+                if (matrix[row][column] == null) {
+                    matrix[row][column] = value;
+                    return this;
+                }
+
+        return this;
+    }
 
     public abstract AbstractMatrix<T> add(T number, int row, int column);
 
@@ -142,20 +161,36 @@ public abstract class AbstractMatrix<T> {
         return columnSize;
     }
 
-    public final void checkRow(int row){
+     final void checkRow(int row){
         if (row >= getRowSize()) throw new IllegalArgumentException("Entered Row is bigger than RowSize!");
     }
 
-    public final void checkColumn(int column){
+     final void checkColumn(int column){
         if(column >= getColumnSize()) throw new IllegalArgumentException("Entered Column is bigger than ColumnSize!");
     }
 
-    public final void checkNullity(Object object,int row,int column){
+     final void checkNullity(Object object,int row,int column){
         if (object == null) throw new NullPointerException(String.format("org.EasyMatrix.Matrix[%d][%d] is null!",row,column));
     }
 
     public final boolean isSquare(){
         return getRowSize() == getColumnSize();
+    }
+
+    public int occupiedElementsSize(){
+        return (int) Stream.of(matrix).flatMap(Arrays::stream).filter(Objects::nonNull).count();
+    }
+
+    public int notOccupiedElementsSize(){
+        return (int) Stream.of(matrix).flatMap(Arrays::stream).filter(Objects::isNull).count();
+    }
+
+    public int size(){
+        return getRowSize()* getColumnSize();
+    }
+
+    public boolean isMatrixFull(){
+        return size() == occupiedElementsSize();
     }
 
 }
