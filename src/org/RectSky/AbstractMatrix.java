@@ -21,24 +21,37 @@ public abstract class AbstractMatrix<T> {
         matrix = new Float[rowSize][columnSize];
     }
 
-    public AbstractMatrix<T> add(T value){
+    public final boolean add(T value){
         if (value == null)
             throw new NullPointerException("Value is Null!");
 
-        if (isMatrixFull())
-            throw new MatrixFullException();
+        if (isMatrixFull()) return false;
 
-        for (int row = 0; row < getRowSize(); row++)
-            for (int column = 0; column < getColumnSize(); column++)
-                if (matrix[row][column] == null) {
-                    matrix[row][column] = value;
-                    return this;
-                }
+        for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) {
+            if (matrix[row][column] == null) {
+                matrix[row][column] = value;
+                return true;
+            }
+        }
 
-        return this;
+        return false;
     }
 
-    public abstract AbstractMatrix<T> add(T number, int row, int column);
+    public final boolean add(T number, int row, int column){
+        if (number == null)
+            throw new NullPointerException("Number is Null!");
+
+        if (isMatrixFull()) return false;
+
+        if (column > getColumnSize()) throw new IllegalArgumentException("Column is Bigger Than ColumnSize");
+        if (row > getRowSize()) throw new IllegalArgumentException("Row is Bigger Than RowSize");
+        if ( row < 0) throw new IllegalArgumentException("Row cannot be negative");
+        if (column < 0 ) throw new IllegalArgumentException("Column cannot be negative");
+
+        matrix[row][column] = number;
+
+        return true;
+    }
 
     public abstract void print();
 
