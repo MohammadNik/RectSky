@@ -1,8 +1,8 @@
 package org.RectSky;
 
-import org.RectSky.Exceptions.MatrixFullException;
 import org.RectSky.Exceptions.MatrixNotSquareException;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -18,7 +18,7 @@ public abstract class AbstractMatrix<T> {
     public AbstractMatrix(int rowSize, int columnSize){
         this.columnSize = columnSize;
         this.rowSize = rowSize;
-        matrix = new Float[rowSize][columnSize];
+        matrix = new Object[rowSize][columnSize];
     }
 
     public final boolean add(T value){
@@ -138,8 +138,11 @@ public abstract class AbstractMatrix<T> {
         return true;
     }
 
-    public final T[][] get(){
-        return (T[][]) matrix;
+    @SuppressWarnings({"unchecked", "SuspiciousSystemArraycopy"})
+    public final T[][] get(Class cls){
+        T[][] array = (T[][]) Array.newInstance(cls,getRowSize(),getColumnSize());
+        for (int i = 0; i < getRowSize(); i++) System.arraycopy(matrix[i],0,array[i],0,matrix[i].length);
+        return array;
     }
 
     public final T get(int row, int column){
@@ -183,7 +186,7 @@ public abstract class AbstractMatrix<T> {
     }
 
      final void checkNullity(Object object,int row,int column){
-        if (object == null) throw new NullPointerException(String.format("org.EasyMatrix.Matrix[%d][%d] is null!",row,column));
+        if (object == null) throw new NullPointerException(String.format("Matrix[%d][%d] is null!",row,column));
     }
 
     public final boolean isSquare(){
@@ -191,11 +194,11 @@ public abstract class AbstractMatrix<T> {
     }
 
     public int occupiedElementsSize(){
-        return (int) Stream.of(matrix).flatMap(Arrays::stream).filter(Objects::nonNull).count();
+        return (int) Stream.of(matrix).parallel().flatMap(Arrays::stream).filter(Objects::nonNull).count();
     }
 
     public int notOccupiedElementsSize(){
-        return (int) Stream.of(matrix).flatMap(Arrays::stream).filter(Objects::isNull).count();
+        return (int) Stream.of(matrix).parallel().flatMap(Arrays::stream).filter(Objects::isNull).count();
     }
 
     public int size(){
