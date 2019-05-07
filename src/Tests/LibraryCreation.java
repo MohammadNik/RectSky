@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static java.lang.System.out;
+
 public class LibraryCreation {
     private NumberMatrix numberMatrix;
 
@@ -15,9 +17,11 @@ public class LibraryCreation {
                     .add(5).add(2.5);
     }
 
-    @Before
+    @Test
     public void addWithRowColumn(){
-        numberMatrix.add(42,1,1);
+//        numberMatrix.add(42,1,1);
+        out.print("Matrix[1][1] -> ");
+        out.println(numberMatrix.get(1,1));
     }
 
     @Test
@@ -27,13 +31,20 @@ public class LibraryCreation {
 
     @Test
     public void getRow(){
-        System.out.println("Row -> 0");
-        System.out.println(Arrays.toString(numberMatrix.getRow(0)));
+        out.println("Row -> 0");
+        out.println(Arrays.toString(numberMatrix.getRow(0)));
+
     }
 
     @Test
     public void getColumn(){
-        System.out.println("Column -> 0");
-        System.out.println(Arrays.toString(numberMatrix.getColumn(0)));
+        out.println("Column -> 0");
+        out.println(Arrays.toString(numberMatrix.getColumn(0)));
+    }
+
+    @Test
+    public void getDiagonal(){
+        out.println("Diagonal ->");
+        out.println(Arrays.toString(numberMatrix.getDiagonal()));
     }
 }

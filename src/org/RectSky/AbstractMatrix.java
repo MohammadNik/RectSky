@@ -23,22 +23,21 @@ public abstract class AbstractMatrix<T> {
     }
 
     public final AbstractMatrix<T> add(T value) throws MatrixFullException,NullPointerException{
-        checkNullity(value);
+        if (value == null) return this;
         if (isMatrixFull()) throw new MatrixFullException();
 
-        for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) {
+        outer: for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) {
             if (matrix[row][column] == null) {
                 matrix[row][column] = value;
-                break;
+                break outer;
             }
         }
 
         return this;
     }
 
-    public final AbstractMatrix<T> add(T value, int row, int column) throws MatrixFullException,NullPointerException,IllegalArgumentException{
-        checkNullity(value);
-        if (isMatrixFull()) throw new MatrixFullException();
+    public final AbstractMatrix<T> add(T value, int row, int column) throws NullPointerException,IllegalArgumentException{
+        if (value == null) return this;
         checkRow(row);
         checkColumn(column);
         if ( row < 0) throw new IllegalArgumentException("Row cannot be negative");
@@ -160,13 +159,21 @@ public abstract class AbstractMatrix<T> {
     @SuppressWarnings("unchecked")
     public final T[] getColumn(int column) throws IllegalArgumentException{
         checkColumn(column);
-
         Object[] temp = new Object[getRowSize()];
-        for (int i = 0; i < getRowSize() ; i++) {
-            temp[i] = matrix[i][column];
-        }
+        for (int i = 0; i < getRowSize() ; i++) temp[i] = matrix[i][column];
+
         return (T[]) temp;
     }
+
+    @SuppressWarnings("unchecked")
+    public final T[] getDiagonal() throws MatrixNotSquareException{
+        if (!isSquare()) throw new MatrixNotSquareException();
+        Object[] temp = new Object[getRowSize()];
+        for (int i = 0; i < getRowSize(); i++) temp[i] = matrix[i][i];
+        return (T[]) temp;
+    }
+
+
 
       public final int getRowSize() {
         return rowSize;
