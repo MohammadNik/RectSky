@@ -13,6 +13,19 @@ public class Index {
         this.column = column;
     }
 
+    public void zeroColumn(){
+        column = 0;
+    }
+
+    public void incrementColumn(){
+        column++;
+    }
+
+    public void incrementRow(){
+        row++;
+    }
+
+
     public int column() {
         return column;
     }

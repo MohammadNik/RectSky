@@ -4,19 +4,16 @@ import org.RectSky.Exceptions.MatrixFullException;
 import org.RectSky.Exceptions.MatrixNotSquareException;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public abstract class AbstractMatrix<T> {
     private int rowSize;
     private int columnSize;
     private Object[][] matrix;
 
-    private int pointer = 0;
+    private Index index = Index.builder(0,0);
 
     private int occupiedElements = 0 ;
 
@@ -30,16 +27,27 @@ public abstract class AbstractMatrix<T> {
         if (value == null) return this;
         if (isMatrixFull()) throw new MatrixFullException();
 
-        outer: for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) {
-            if (matrix[row][column] == null) {
-                matrix[row][column] = value;
-                // add to size
-                occupiedElements++;
-                break outer;
-            }
-        }
+//        outer: for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) {
+//            if (matrix[row][column] == null) {
+//                matrix[row][column] = value;
+//                // add to size
+//                occupiedElements++;
+//                break outer;
+//            }
+//        }
+
+        matrix[index.row()][index.column()] = value;
+        incrementIndex();
+
 
         return this;
+    }
+
+    private void incrementIndex(){
+        if ((index.column() + 1) == getColumnSize()){
+            index.zeroColumn();
+            index.incrementRow();
+        }else index.incrementColumn();
     }
 
     public final AbstractMatrix<T> add(T value, int row, int column) throws NullPointerException,IllegalArgumentException{
