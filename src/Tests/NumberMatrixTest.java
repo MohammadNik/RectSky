@@ -1,3 +1,4 @@
+import org.RectSky.MatrixBuilder;
 import org.RectSky.NumberMatrix;
 import org.junit.Before;
 import org.junit.Test;
@@ -116,6 +117,17 @@ public class NumberMatrixTest {
     @Test
     public void testPredicateDiagonal() {
         out.println(numberMatrix.forEachDiagonalPredicate(number -> number.doubleValue() > 0));
+    }
+
+    @Test
+    public void createWithBuilder(){
+        NumberMatrix numberMatrix = MatrixBuilder.TWO_TWO(1,2,3,4);
+        numberMatrix.print();
+    }
+
+    @Test
+    public void size(){
+        out.println(numberMatrix.occupiedElementsSize());
     }
 
 

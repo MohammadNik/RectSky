@@ -16,6 +16,10 @@ public abstract class AbstractMatrix<T> {
     private int columnSize;
     private Object[][] matrix;
 
+    private int pointer = 0;
+
+    private int occupiedElements = 0 ;
+
     public AbstractMatrix(int rowSize, int columnSize){
         this.columnSize = columnSize;
         this.rowSize = rowSize;
@@ -29,6 +33,8 @@ public abstract class AbstractMatrix<T> {
         outer: for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) {
             if (matrix[row][column] == null) {
                 matrix[row][column] = value;
+                // add to size
+                occupiedElements++;
                 break outer;
             }
         }
@@ -43,6 +49,8 @@ public abstract class AbstractMatrix<T> {
         if ( row < 0) throw new IllegalArgumentException("Row cannot be negative");
         if (column < 0 ) throw new IllegalArgumentException("Column cannot be negative");
 
+        // check if Matrix[row][column] has value then it's overriding and don't need to ++occupiedElements
+        if ( matrix[row][column] == null) occupiedElements++;
         matrix[row][column] = value;
 
         return this;
@@ -206,11 +214,11 @@ public abstract class AbstractMatrix<T> {
     }
 
     public int occupiedElementsSize(){
-        return (int) Stream.of(matrix).parallel().flatMap(Arrays::stream).filter(Objects::nonNull).count();
+        return occupiedElements;
     }
 
     public int notOccupiedElementsSize(){
-        return (int) Stream.of(matrix).parallel().flatMap(Arrays::stream).filter(Objects::isNull).count();
+        return size() - occupiedElements;
     }
 
     public int size(){
