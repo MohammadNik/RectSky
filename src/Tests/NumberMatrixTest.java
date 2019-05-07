@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import static java.lang.System.out;
 
-public class LibraryCreation {
+public class NumberMatrixTest {
     private NumberMatrix numberMatrix;
 
 
@@ -19,26 +19,27 @@ public class LibraryCreation {
 
     @Test
     public void addWithRowColumn(){
-//        numberMatrix.add(42,1,1);
+        numberMatrix.add(42,1,1);
         out.print("Matrix[1][1] -> ");
         out.println(numberMatrix.get(1,1));
     }
 
     @Test
     public void print(){
+        out.println("Matrix");
         numberMatrix.print();
     }
 
     @Test
     public void getRow(){
-        out.println("Row -> 0");
+        out.print("Row -> 0 ");
         out.println(Arrays.toString(numberMatrix.getRow(0)));
 
     }
 
     @Test
     public void getColumn(){
-        out.println("Column -> 0");
+        out.print("Column -> 0 ");
         out.println(Arrays.toString(numberMatrix.getColumn(0)));
     }
 
