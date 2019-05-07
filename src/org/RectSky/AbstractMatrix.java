@@ -50,85 +50,87 @@ public abstract class AbstractMatrix<T> {
 
     public abstract void print();
 
-    public final void forEachElement(Consumer<Object> consumer){
+    public final void forEachElementConsume(Consumer<T> consumer){
         for (int row = 0; row < getRowSize(); row++)
             for (int column = 0; column < getColumnSize(); column++)
                 consumer.accept(get(row,column));
     }
 
-    public final void forEachRow(Consumer<Object> consumer, int row){
+    public final void forEachRowConsume(Consumer<T> consumer, int row){
         checkRow(row);
         for (int column = 0; column < getRowSize(); column++)
             consumer.accept(get(row,column));
     }
 
-    public final void forEachColumn(Consumer<Object> consumer, int column){
+    public final void forEachColumnConsume(Consumer<T> consumer, int column){
         checkColumn(column);
         for (int row = 0; row < getRowSize(); row++)
             consumer.accept(get(row,column));
     }
 
-    public final void forEachDiagonal(Consumer<Object> consumer){
-        if (!isSquare())
-            throw new MatrixNotSquareException();
+    public final void forEachDiagonalConsume(Consumer<T> consumer){
+        checkIfMatrixSqaure();
 
         for (int index = 0; index < getRowSize(); index++)
             consumer.accept(get(index,index));
     }
 
-    public final void forEachElementFunction(Function<Object,Object> function){
+    public final void forEachElementFunction(Function<T,T> function){
         for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) invokeFunction(function,row,column);
     }
 
-    public final void forEachRowFunction(Function<Object,Object> function,int row){
+    public final void forEachRowFunction(Function<T,T> function, int row){
         checkRow(row);
         for (int column = 0; column < getColumnSize(); column++) invokeFunction(function,row,column);
     }
 
-    public final void forEachColumnFunction(Function<Object,Object> function, int column){
+    public final void forEachColumnFunction(Function<T,T> function, int column){
         checkColumn(column);
         for (int row = 0; row < getRowSize(); row++) invokeFunction(function,row,column);
     }
 
-    public final void forEachDiagonalFunction(Function<Object,Object> function){
-        if (!isSquare())
-            throw new MatrixNotSquareException();
+    public final void forEachDiagonalFunction(Function<T,T> function){
+        checkIfMatrixSqaure();
 
         for (int index = 0; index < getRowSize(); index++) invokeFunction(function,index,index);
     }
 
-    private void invokeFunction(Function<Object,Object> function, int row, int column){
+    @SuppressWarnings("unchecked")
+    private void invokeFunction(Function<T,T> function, int row, int column){
         Object temp = matrix[row][column];
         checkNullity(temp,row,column);
-        matrix[row][column] = function.apply(temp);
+        matrix[row][column] = function.apply( (T) temp);
     }
 
-    public final boolean forEachElementPredicate(Predicate<Index> predicate) {
+    public final boolean forEachElementPredicate(Predicate<T> predicate) {
         return forEachElementPredicate(predicate,getRowSize(),getColumnSize());
     }
 
-    private boolean forEachElementPredicate(Predicate<Index> predicate, int maxRow, int maxColumn){
+    @SuppressWarnings("unchecked")
+    private boolean forEachElementPredicate(Predicate<T> predicate, int maxRow, int maxColumn){
         for (int row = 0; row < maxRow; row++) for (int column = 0; column < maxColumn; column++){
-            if (!predicate.test(Index.builder(row,column))) return false;
+            if (!predicate.test( (T) matrix[row][column])) return false;
         }
 
         return true;
     }
 
-    public final boolean forEachRowPredicate(Predicate<Index> predicate, int row){
-        for (int column = 0; column < getColumnSize(); column++) if (!predicate.test(Index.builder(row,column))) return false;
+    @SuppressWarnings("unchecked")
+    public final boolean forEachRowPredicate(Predicate<T> predicate, int row){
+        for (int column = 0; column < getColumnSize(); column++) if (!predicate.test((T) matrix[row][column])) return false;
         return true;
     }
 
-    public final boolean forEachColumnPredicate(Predicate<Index> predicate, int column){
-        for (int row = 0; row < getRowSize(); row++) if (!predicate.test(Index.builder(row,column))) return false;
+    @SuppressWarnings("unchecked")
+    public final boolean forEachColumnPredicate(Predicate<T> predicate, int column){
+        for (int row = 0; row < getRowSize(); row++) if (!predicate.test((T) matrix[row][column])) return false;
         return true;
     }
 
-    public final boolean forEachDiagonalPredicate(Predicate<Index> predicate){
-        if (!isSquare()) throw new MatrixNotSquareException();
-
-        for (int index = 0; index < getRowSize(); index++) if (!predicate.test(Index.builder(index,index))) return false;
+    @SuppressWarnings("unchecked")
+    public final boolean forEachDiagonalPredicate(Predicate<T> predicate){
+        checkIfMatrixSqaure();
+        for (int index = 0; index < getRowSize(); index++) if (!predicate.test((T) matrix[index][index])) return false;
 
         return true;
     }
@@ -195,8 +197,8 @@ public abstract class AbstractMatrix<T> {
         if (object == null) throw new NullPointerException(String.format("Matrix[%d][%d] is null!",row,column));
     }
 
-    final void checkNullity(Object object){
-        if (object == null) throw new NullPointerException("Entered value is null!");
+    final void checkIfMatrixSqaure(){
+        if (!isSquare()) throw new MatrixNotSquareException();
     }
 
     public final boolean isSquare(){

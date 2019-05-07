@@ -45,7 +45,78 @@ public class NumberMatrixTest {
 
     @Test
     public void getDiagonal(){
-        out.println("Diagonal ->");
+        out.print("Diagonal ->");
         out.println(Arrays.toString(numberMatrix.getDiagonal()));
     }
+
+    @Test
+    public void testConsumer() {
+        numberMatrix.forEachElementConsume(number -> out.println(number.doubleValue() * 2) );
+    }
+
+    @Test
+    public void testConsumerColumn() {
+        numberMatrix.forEachColumnConsume(number -> out.println(number.doubleValue() * 2),0 );
+    }
+
+    @Test
+    public void testConsumerRow() {
+        numberMatrix.forEachRowConsume(number -> out.println(number.doubleValue() * 2),0 );
+    }
+
+    @Test
+    public void testConsumerDiagonal() {
+        numberMatrix.forEachRowConsume(number -> out.println(number.doubleValue() * 2),0 );
+    }
+
+    @Test
+    public void testFunction() {
+        numberMatrix.print();
+        numberMatrix.forEachElementFunction(number -> number.doubleValue()*2);
+        numberMatrix.print();
+    }
+
+    @Test
+    public void testFunctionColumn() {
+        numberMatrix.print();
+        numberMatrix.forEachColumnFunction(number -> number.doubleValue()*2,0);
+        numberMatrix.print();
+    }
+
+    @Test
+    public void testFunctionRow() {
+        numberMatrix.print();
+        numberMatrix.forEachRowFunction(number -> number.doubleValue()*2,0 );
+        numberMatrix.print();
+    }
+
+    @Test
+    public void testFunctionDiagonal() {
+        numberMatrix.print();
+        numberMatrix.forEachDiagonalFunction(number -> number.doubleValue()*2 );
+        numberMatrix.print();
+    }
+
+
+    @Test
+    public void testPredicate() {
+        out.println(numberMatrix.forEachElementPredicate(number -> number.doubleValue() > 0));
+    }
+
+    @Test
+    public void testPredicateColumn() {
+        out.println(numberMatrix.forEachColumnPredicate(number -> number.doubleValue() > 0,1));
+    }
+
+    @Test
+    public void testPredicateRow() {
+        out.println(numberMatrix.forEachRowPredicate(number -> number.doubleValue() > 0,1));
+    }
+
+    @Test
+    public void testPredicateDiagonal() {
+        out.println(numberMatrix.forEachDiagonalPredicate(number -> number.doubleValue() > 0));
+    }
+
+
 }
