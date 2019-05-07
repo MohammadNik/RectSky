@@ -1,5 +1,6 @@
 package org.RectSky;
 
+import org.RectSky.Exceptions.MatrixFullException;
 import org.RectSky.Exceptions.MatrixNotSquareException;
 
 import java.lang.reflect.Array;
@@ -21,36 +22,31 @@ public abstract class AbstractMatrix<T> {
         matrix = new Object[rowSize][columnSize];
     }
 
-    public final boolean add(T value){
-        if (value == null)
-            throw new NullPointerException("Value is Null!");
-
-        if (isMatrixFull()) return false;
+    public final AbstractMatrix<T> add(T value){
+        checkNullity(value);
+        if (isMatrixFull()) throw new MatrixFullException();
 
         for (int row = 0; row < getRowSize(); row++) for (int column = 0; column < getColumnSize(); column++) {
             if (matrix[row][column] == null) {
                 matrix[row][column] = value;
-                return true;
+                break;
             }
         }
 
-        return false;
+        return this;
     }
 
-    public final boolean add(T number, int row, int column){
-        if (number == null)
-            throw new NullPointerException("Number is Null!");
-
-        if (isMatrixFull()) return false;
-
-        if (column > getColumnSize()) throw new IllegalArgumentException("Column is Bigger Than ColumnSize");
-        if (row > getRowSize()) throw new IllegalArgumentException("Row is Bigger Than RowSize");
+    public final AbstractMatrix<T> add(T value, int row, int column){
+        checkNullity(value);
+        if (isMatrixFull()) throw new MatrixFullException();
+        checkRow(row);
+        checkColumn(column);
         if ( row < 0) throw new IllegalArgumentException("Row cannot be negative");
         if (column < 0 ) throw new IllegalArgumentException("Column cannot be negative");
 
-        matrix[row][column] = number;
+        matrix[row][column] = value;
 
-        return true;
+        return this;
     }
 
     public abstract void print();
@@ -145,7 +141,8 @@ public abstract class AbstractMatrix<T> {
         return array;
     }
 
-    public final T get(int row, int column){
+    @SuppressWarnings("unchecked")
+    public final T get(int row, int column) throws IllegalArgumentException{
         checkRow(row);
         checkColumn(column);
         Object temp = matrix[row][column];
@@ -154,12 +151,14 @@ public abstract class AbstractMatrix<T> {
         return (T) temp;
     }
 
-    public final T[] getRow(int row){
+    @SuppressWarnings("unchecked")
+    public final T[] getRow(int row) throws IllegalArgumentException{
        checkRow(row);
         return (T[]) matrix[row];
     }
 
-    public final T[] getColumn(int column){
+    @SuppressWarnings("unchecked")
+    public final T[] getColumn(int column) throws IllegalArgumentException{
         checkColumn(column);
 
         Object[] temp = new Object[getRowSize()];
@@ -169,11 +168,11 @@ public abstract class AbstractMatrix<T> {
         return (T[]) temp;
     }
 
-     public final int getRowSize() {
+      public final int getRowSize() {
         return rowSize;
     }
 
-     public final int getColumnSize() {
+      public final int getColumnSize() {
         return columnSize;
     }
 
@@ -187,6 +186,10 @@ public abstract class AbstractMatrix<T> {
 
      final void checkNullity(Object object,int row,int column){
         if (object == null) throw new NullPointerException(String.format("Matrix[%d][%d] is null!",row,column));
+    }
+
+    final void checkNullity(Object object){
+        if (object == null) throw new NullPointerException("Entered value is null!");
     }
 
     public final boolean isSquare(){

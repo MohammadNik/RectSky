@@ -1,23 +1,34 @@
 import org.RectSky.NumberMatrix;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class LibraryCreation {
+    private NumberMatrix numberMatrix;
 
 
-    @Test
-    public void createNumberMatrix(){
-        NumberMatrix numberMatrix = new NumberMatrix(1,2);
+    @Before
+    public void startup(){
+         numberMatrix = new NumberMatrix(2,2);
+        numberMatrix.add(4);numberMatrix.add(5.4);
+        numberMatrix.add(5);numberMatrix.add(2.5);
     }
 
     @Test
-    public void addElementsToNumberMatrix(){
-        NumberMatrix numberMatrix = new NumberMatrix(2,2);
-        numberMatrix.add(4);
-        numberMatrix.add(5.4);
-        numberMatrix.add(5);
-        numberMatrix.add(2.5);
-        numberMatrix.add(3.2);
-        System.out.println(numberMatrix.isMatrixFull());
+    public void print(){
         numberMatrix.print();
+    }
+
+    @Test
+    public void getRow(){
+        System.out.println("Row -> 0");
+        System.out.println(Arrays.toString(numberMatrix.getRow(0)));
+    }
+
+    @Test
+    public void getColumn(){
+        System.out.println("Column -> 0");
+        System.out.println(Arrays.toString(numberMatrix.getColumn(0)));
     }
 }

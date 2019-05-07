@@ -13,11 +13,8 @@ public class NumberMatrix extends AbstractMatrix<Number> {
     @Override
     public void print() {
         Arrays.stream(get(Number.class)).forEach(numbers -> {
-            StringBuilder builder = new StringBuilder();
-            builder.append("[")
-                    .append(Stream.of(numbers).map(Number::toString).collect(Collectors.joining(",")))
-                    .append("]");
-            System.out.println(builder.toString());
+            String builder = "[" + Stream.of(numbers).map(number -> number == null ? "Null" : number.toString()).collect(Collectors.joining(",")) + "]";
+            System.out.println(builder);
         });
     }
 
