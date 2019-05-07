@@ -22,7 +22,7 @@ public abstract class AbstractMatrix<T> {
         matrix = new Object[rowSize][columnSize];
     }
 
-    public final AbstractMatrix<T> add(T value){
+    public final AbstractMatrix<T> add(T value) throws MatrixFullException,NullPointerException{
         checkNullity(value);
         if (isMatrixFull()) throw new MatrixFullException();
 
@@ -36,7 +36,7 @@ public abstract class AbstractMatrix<T> {
         return this;
     }
 
-    public final AbstractMatrix<T> add(T value, int row, int column){
+    public final AbstractMatrix<T> add(T value, int row, int column) throws MatrixFullException,NullPointerException,IllegalArgumentException{
         checkNullity(value);
         if (isMatrixFull()) throw new MatrixFullException();
         checkRow(row);

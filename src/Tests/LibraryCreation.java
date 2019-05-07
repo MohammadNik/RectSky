@@ -11,8 +11,13 @@ public class LibraryCreation {
     @Before
     public void startup(){
          numberMatrix = new NumberMatrix(2,2);
-        numberMatrix.add(4);numberMatrix.add(5.4);
-        numberMatrix.add(5);numberMatrix.add(2.5);
+        numberMatrix.add(4).add(5.4)
+                    .add(5).add(2.5);
+    }
+
+    @Before
+    public void addWithRowColumn(){
+        numberMatrix.add(42,1,1);
     }
 
     @Test
