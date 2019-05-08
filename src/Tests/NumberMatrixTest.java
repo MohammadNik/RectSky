@@ -1,4 +1,4 @@
-import org.RectSky.MatrixBuilder;
+import org.RectSky.AbstractMatrix;
 import org.RectSky.NumberMatrix;
 import org.junit.Before;
 import org.junit.Test;
@@ -121,7 +121,7 @@ public class NumberMatrixTest {
 
     @Test
     public void createWithBuilder(){
-        NumberMatrix numberMatrix = MatrixBuilder.TWO_TWO(1,2,3,4);
+        NumberMatrix numberMatrix = AbstractMatrix.TWO_TWO(1,2,3,4);
         numberMatrix.print();
     }
 
