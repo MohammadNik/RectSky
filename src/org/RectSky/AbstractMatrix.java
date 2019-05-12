@@ -98,7 +98,7 @@ public abstract class AbstractMatrix<T> {
 
 
     /**
-     *  same as {@link #add(Object)} in addition, this method get a row and column for setting value to a specific index
+     *  same as {@link #add(Object)} in addition, this method get a row and column for adding or setting value to a specific index
      * @return current matrix for chain adding
      * @throws NullPointerException throw while matrix is full and trying to add new value
      * @throws IllegalArgumentException throw if {row || column} are ineligible -> negative or higher than dimen of matrix {row || column}
@@ -178,38 +178,39 @@ public abstract class AbstractMatrix<T> {
         matrix[row][column] = function.apply( (T) temp);
     }
 
-    public final boolean forEachElementPredicate(Predicate<T> predicate) {
-        return forEachElementPredicate(predicate,getRowSize(),getColumnSize());
+    public final boolean forEachElementPredicate(MatrixPredicate<T> predicate) {
+        return forEachElementPredicate(predicate,matrix);
     }
 
     /**
      * inner method for implementing forEachPredicate
      */
     @SuppressWarnings("unchecked")
-    private boolean forEachElementPredicate(Predicate<T> predicate, int maxRow, int maxColumn){
-        for (int row = 0; row < maxRow; row++) for (int column = 0; column < maxColumn; column++){
-            if (!predicate.test( (T) matrix[row][column])) return false;
+    public final boolean forEachElementPredicate(MatrixPredicate<T> predicate,Object[][] matrix){
+        int matrixRowSize = matrix.length;
+        for (int row = 0; row < matrixRowSize; row++) for (int column = 0; column < matrix[row].length; column++){
+            if (!predicate.test( (T) matrix[row][column],row,column)) return false;
         }
 
         return true;
     }
 
     @SuppressWarnings("unchecked")
-    public final boolean forEachRowPredicate(Predicate<T> predicate, int row){
-        for (int column = 0; column < getColumnSize(); column++) if (!predicate.test((T) matrix[row][column])) return false;
+    public final boolean forEachRowPredicate(MatrixPredicate<T> predicate, int row){
+        for (int column = 0; column < getColumnSize(); column++) if (!predicate.test((T) matrix[row][column],row,column)) return false;
         return true;
     }
 
     @SuppressWarnings("unchecked")
-    public final boolean forEachColumnPredicate(Predicate<T> predicate, int column){
-        for (int row = 0; row < getRowSize(); row++) if (!predicate.test((T) matrix[row][column])) return false;
+    public final boolean forEachColumnPredicate(MatrixPredicate<T> predicate, int column){
+        for (int row = 0; row < getRowSize(); row++) if (!predicate.test((T) matrix[row][column],row,column)) return false;
         return true;
     }
 
     @SuppressWarnings("unchecked")
-    public final boolean forEachDiagonalPredicate(Predicate<T> predicate){
+    public final boolean forEachDiagonalPredicate(MatrixPredicate<T> predicate){
         checkIfMatrixSqaure();
-        for (int index = 0; index < getRowSize(); index++) if (!predicate.test((T) matrix[index][index])) return false;
+        for (int index = 0; index < getRowSize(); index++) if (!predicate.test((T) matrix[index][index],index,index)) return false;
 
         return true;
     }
@@ -335,4 +336,7 @@ public abstract class AbstractMatrix<T> {
         return size() == occupiedElementsSize();
     }
 
+    public final boolean isEqualSize(AbstractMatrix<T> abstractMatrix){
+        return (getRowSize() == abstractMatrix.getRowSize()) && ( getColumnSize() == abstractMatrix.getColumnSize());
+    }
 }
