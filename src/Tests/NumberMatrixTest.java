@@ -1,5 +1,6 @@
 import org.RectSky.AbstractMatrix;
 import org.RectSky.NumberMatrix;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -129,6 +130,7 @@ public class NumberMatrixTest {
     public void size(){
         out.println(numberMatrix.occupiedElementsSize());
     }
+
 
 
 }
