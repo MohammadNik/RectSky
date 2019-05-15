@@ -320,15 +320,15 @@ public class NumberMatrix extends AbstractMatrix<Number> {
     }
 
     public final Number sumOfColumn(int column){
-        return Stream.of(getColumn(column)).reduce(0f,(x,y)->x.doubleValue()+y.doubleValue());
+        return Stream.of(getColumn(column)).parallel().reduce(0f,(x,y)->x.doubleValue()+y.doubleValue());
     }
 
     public final Number sumOfRow(int row){
-        return Stream.of(getRow(row)).reduce(0f,(x,y)->x.doubleValue()+y.doubleValue());
+        return Stream.of(getRow(row)).parallel().reduce(0f,(x,y)->x.doubleValue()+y.doubleValue());
     }
 
     public Number sumOfElements(){
-        return Stream.of(get(Number.class)).flatMap(Arrays::stream).reduce(0f,(x,y)->x.doubleValue()+y.doubleValue());
+        return Stream.of(get(Number.class)).parallel().flatMap(Arrays::stream).reduce(0f,(x,y)->x.doubleValue()+y.doubleValue());
     }
 
 
