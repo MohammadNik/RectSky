@@ -102,22 +102,22 @@ public class NumberMatrixTest {
 
     @Test
     public void testPredicate() {
-        out.println(numberMatrix.forEachElementPredicate(number -> number.doubleValue() > 0));
+        out.println(numberMatrix.forEachElementPredicate((number,row,column) -> number.doubleValue() > 0));
     }
 
     @Test
     public void testPredicateColumn() {
-        out.println(numberMatrix.forEachColumnPredicate(number -> number.doubleValue() > 0,1));
+        out.println(numberMatrix.forEachColumnPredicate((number,row,column) -> number.doubleValue() > 0,1));
     }
 
     @Test
     public void testPredicateRow() {
-        out.println(numberMatrix.forEachRowPredicate(number -> number.doubleValue() > 0,1));
+        out.println(numberMatrix.forEachRowPredicate((number,row,column) -> number.doubleValue() > 0,1));
     }
 
     @Test
     public void testPredicateDiagonal() {
-        out.println(numberMatrix.forEachDiagonalPredicate(number -> number.doubleValue() > 0));
+        out.println(numberMatrix.forEachDiagonalPredicate((number,row,column) -> number.doubleValue() > 0));
     }
 
     @Test
