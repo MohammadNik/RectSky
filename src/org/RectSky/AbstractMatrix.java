@@ -4,9 +4,12 @@ import org.RectSky.Exceptions.MatrixFullException;
 import org.RectSky.Exceptions.MatrixNotSquareException;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -121,7 +124,12 @@ public abstract class AbstractMatrix<T> {
     /**
      * structure for implementing printing matrix
      */
-    public abstract void print();
+    public final void print(){
+        Arrays.stream(get(Number.class)).forEach(objs -> {
+            String builder = "[" + Stream.of(objs).map(obj -> obj == null ? "Null" : obj.toString()).collect(Collectors.joining(",")) + "]";
+            System.out.println(builder);
+        });
+    }
 
     public final void forEachElementConsume(Consumer<T> consumer){
         for (int row = 0; row < getRowSize(); row++)

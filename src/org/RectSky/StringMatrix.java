@@ -12,8 +12,5 @@ public class StringMatrix extends AbstractMatrix<StringMatrix> {
         super(rowSize, columnSize);
     }
 
-    @Override
-    public void print() {
 
-    }
 }

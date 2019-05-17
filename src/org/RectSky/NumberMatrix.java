@@ -311,13 +311,6 @@ public class NumberMatrix extends AbstractMatrix<Number> {
         forEachElementFunction(x-> x.doubleValue()*number.doubleValue());
     }
 
-    @Override
-    public void print() {
-        Arrays.stream(get(Number.class)).forEach(numbers -> {
-            String builder = "[" + Stream.of(numbers).map(number -> number == null ? "Null" : number.toString()).collect(Collectors.joining(",")) + "]";
-            System.out.println(builder);
-        });
-    }
 
     public final Number sumOfColumn(int column){
         return Stream.of(getColumn(column)).parallel().reduce(0f,(x,y)->x.doubleValue()+y.doubleValue());
